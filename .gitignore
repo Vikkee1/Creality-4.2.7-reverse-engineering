@@ -53,3 +53,16 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# Obsolete folders
+.claude/
+.vscode/
+build/
+cmake/
+Core/
+Drivers/
+.mxproject
+*.ioc
+*.s
+*.ld
+CMakePresets.json
