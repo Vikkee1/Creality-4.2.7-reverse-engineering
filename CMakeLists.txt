@@ -46,6 +46,7 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     App/Soft_I2C/soft_i2c.c
     App/Board/soft_i2c_stm32.c
+    App/I2C/i2c_bus_soft.c
     App/app.c
     App/HAL/hal_stm32f1xx.c
     App/Eeprom/eeprom_BL23C16A.c
@@ -57,6 +58,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     App/Board/
     App/HAL/
     App/Eeprom/
+    App/I2C/
     App/
 )
 
