@@ -10,8 +10,69 @@ bool eeprom_wait_write_done(const i2c_bus_t *bus, uint8_t addr7)
     return false;
 }
 
-bool eeprom_full_erase(const i2c_bus_t *bus){
+bool eeprom_write_page(const i2c_bus_t *bus, uint8_t page_index, const uint8_t *data, size_t len){
 
+    if (bus == NULL ||
+        data == NULL ||
+        page_index >= EEPROM_PAGE_COUNT ||
+        len > EEPROM_PAGE_SIZE){
+        return false;
+    }
+
+    i2c_status_t st;
+
+    // Calculte page index starting address.
+    uint16_t page_reg_addr = page_index * EEPROM_PAGE_SIZE;
+
+    // Format the device address and memory page address
+    uint8_t device_addr = EEPROM_BASE_ADDR | (page_reg_addr >> 8);
+    uint8_t reg = (page_reg_addr & 0xFF);
+
+    st = bus->mem_write(bus->ctx, device_addr, reg,  data, len);
+
+    if (st != I2C_BUS_OK){
+        uart_logf("  mem_write reg 0x%02X failed: %d\r\n", reg, (int)st);
+        return false;
+    }
+
+    return true;
+}
+
+bool eeprom_read_page(const i2c_bus_t *bus, uint8_t page_index, uint8_t *data, size_t len){
+
+    if (bus == NULL ||
+        data == NULL ||
+        page_index >= EEPROM_PAGE_COUNT ||
+        len > EEPROM_PAGE_SIZE){
+        return false;
+    }
+
+    i2c_status_t st;
+
+    // Calculte page index starting address.
+    uint16_t page_reg_addr = page_index * EEPROM_PAGE_SIZE;
+
+    // Format the device address and memory page address
+    uint8_t device_addr = EEPROM_BASE_ADDR | (page_reg_addr >> 8);
+    uint8_t reg = (page_reg_addr & 0xFF);
+
+    if (!eeprom_wait_write_done(bus, device_addr)) {
+        uart_logf("  reg 0x%02X: write cycle timed out\r\n", reg);
+        return false;
+    }
+
+    st = bus->mem_read(bus->ctx, device_addr, reg, data, len);
+    if (st != I2C_BUS_OK) {
+        uart_logf("  mem_read reg 0x%02X failed: %d\r\n", reg, (int)st);
+        return false;
+    }else {
+        for(uint8_t i = 0; i < len; i++){
+            uart_logf("%d ", data[i]);
+        }
+        uart_log("\r\n");
+    }
+
+    return true;
 }
 
 bool eeprom_write_verify(const i2c_bus_t *bus, uint8_t addr7, uint8_t reg,
