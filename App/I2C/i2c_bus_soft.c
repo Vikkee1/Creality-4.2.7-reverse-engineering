@@ -14,33 +14,33 @@ static i2c_status_t map_status(soft_i2c_status_t st)
     }
 }
 
-static i2c_status_t soft_probe(void *ctx, uint8_t addr7)
+static i2c_status_t soft_probe(void *bus, uint8_t addr7)
 {
-    return map_status(soft_i2c_probe((soft_i2c_t *)ctx, addr7));
+    return map_status(soft_i2c_probe((soft_i2c_t *)bus, addr7));
 }
 
-static i2c_status_t soft_write(void *ctx, uint8_t addr7,
+static i2c_status_t soft_write(void *bus, uint8_t addr7,
                                 const uint8_t *data, size_t len)
 {
-    return map_status(soft_i2c_write((soft_i2c_t *)ctx, addr7, data, len));
+    return map_status(soft_i2c_write((soft_i2c_t *)bus, addr7, data, len));
 }
 
-static i2c_status_t soft_read(void *ctx, uint8_t addr7,
+static i2c_status_t soft_read(void *bus, uint8_t addr7,
                                uint8_t *data, size_t len)
 {
-    return map_status(soft_i2c_read((soft_i2c_t *)ctx, addr7, data, len));
+    return map_status(soft_i2c_read((soft_i2c_t *)bus, addr7, data, len));
 }
 
-static i2c_status_t soft_mem_write(void *ctx, uint8_t addr7, uint8_t reg,
+static i2c_status_t soft_mem_write(void *bus, uint8_t addr7, uint8_t reg,
                                     const uint8_t *data, size_t len)
 {
-    return map_status(soft_i2c_mem_write((soft_i2c_t *)ctx, addr7, reg, data, len));
+return map_status(soft_i2c_mem_write((soft_i2c_t *)bus, addr7, reg, data, len));
 }
 
-static i2c_status_t soft_mem_read(void *ctx, uint8_t addr7, uint8_t reg,
+static i2c_status_t soft_mem_read(void *bus, uint8_t addr7, uint8_t reg,
                                    uint8_t *data, size_t len)
 {
-    return map_status(soft_i2c_mem_read((soft_i2c_t *)ctx, addr7, reg, data, len));
+    return map_status(soft_i2c_mem_read((soft_i2c_t *)bus, addr7, reg, data, len));
 }
 
 i2c_bus_t soft_i2c_as_bus(soft_i2c_t *bus)
